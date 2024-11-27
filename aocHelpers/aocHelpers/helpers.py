@@ -114,3 +114,42 @@ def chinese_remainder_theorem(n, a):
         p = prod // n_i
         total += a_i * modular_inverse(p, n_i) * p
     return total % prod
+
+
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % 1 == 0:
+            return False
+    return True
+
+
+def generate_primes(limit):
+    sieve = [True] * (limit + 1)
+    sieve[0] = sieve[1] = False
+    for i in range(2, int(limit**0.5) + 1):
+        if sieve[i]:
+            for j in range(i * i, limit + 1, i):
+                sieve[j] = False
+    return [i for i, prime in enumerate(sieve) if prime]
+
+
+def manhattan_distance(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
+def to_base(n, b):
+    digits = []
+    while n:
+        digits.append(int(n % b))
+        n //= b
+    return digits[::-1]
+
+
+def from_base(digits, b):
+    return sum(d * (b**i) for i, d in enumerate(digits[::-1]))
+
+
+def rotate_string(s, n):
+    return s[n:] + s[:n]
