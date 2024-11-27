@@ -4,25 +4,23 @@ from os import path
 from aocHelpers import inputs
 from aocHelpers.decorators import timer, print_result
 from aocHelpers.init import init
-
-
-def get_drop_time(discs):
-    time = 0
-
-    while True:
-        positions = [
-            (time + val[0] + i) % val[1] for i, val in enumerate(discs, start=1)
-        ]
-        if sum(positions) == 0:
-            return time
-        time += 1
+from aocHelpers.helpers import chinese_remainder_theorem
 
 
 @timer
 @print_result
 def exercise1(arr):
+    # starting position pi, number of positions ni
+    # discs will be at position 0 after t seconds if:
+    # (t + i + pi) (mod ni) = 0
+    # => t = -i - pi (mod ni)
+
     discs = [(pos, count) for _, count, _, pos in arr]
-    return get_drop_time(discs)
+    positions, modulos = list(zip(*discs))
+    target_positions = [
+        (-positions[i] - i - 1) % modulos[i] for i in range(len(modulos))
+    ]
+    return chinese_remainder_theorem(modulos, target_positions)
 
 
 @timer
@@ -30,7 +28,12 @@ def exercise1(arr):
 def exercise2(arr):
     discs = [(pos, count) for _, count, _, pos in arr]
     discs.append((0, 11))
-    return get_drop_time(discs)
+
+    positions, modulos = list(zip(*discs))
+    target_positions = [
+        (-positions[i] - i - 1) % modulos[i] for i in range(len(modulos))
+    ]
+    return chinese_remainder_theorem(modulos, target_positions)
 
 
 def main(args=None):
