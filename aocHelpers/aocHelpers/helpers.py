@@ -1,6 +1,7 @@
 from collections import deque
 from itertools import product
 from functools import reduce
+from hashlib import md5
 
 
 def transpose(matrix):
@@ -153,3 +154,10 @@ def from_base(digits, b):
 
 def rotate_string(s, n):
     return s[n:] + s[:n]
+
+
+def md5_hash(data, salt=""):
+    hash_input = f"{salt}{data}"
+    m = md5()
+    m.update(bytes(hash_input, "utf8"))
+    return m.hexdigest()
